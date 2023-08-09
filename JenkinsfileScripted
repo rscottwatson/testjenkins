@@ -1,0 +1,46 @@
+def download_repo(branchName, targetDir, repository) {
+    git branch: branchName, url: "https://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@github.com/rscottwatson/testjenkins.git"
+}
+
+
+def now = new Date()
+def label = 'scott-test-' + now.format("yyMMdd.HHmm", TimeZone.getTimeZone('America/Los_Angeles'))
+
+
+podTemplate(label: label, yaml: """apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            some-label: some-label-value
+        spec:
+          containers:
+          - name: maven
+            image: maven:alpine
+            command:
+            - cat
+            tty: true
+          - name: busybox
+            image: busybox
+            command:
+            - cat
+            tty: true
+""")
+
+
+{
+    node(label) {
+        stage ('download repo') {
+            download_repo("master", "images-sync", "images-sync")
+        }
+        stage ( 'run maven') {
+           container( name: 'maven' ) {
+              sh """ echo 'I am in maven\n\n'; pwd; ls -l"""
+           }
+       }
+       stage ( 'run busybox') {
+          container( name: 'busybox' ) {
+             sh """ echo 'I am in busybox\n\n'; pwd; ls -l """
+          }
+       }
+    }
+}
