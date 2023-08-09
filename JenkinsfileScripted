@@ -1,5 +1,5 @@
-def download_repo(branchName, targetDir, repository) {
-    git branch: branchName, url: "https://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@github.com/rscottwatson/testjenkins.git"
+def download_repo() {
+    git branch: main, url: "https://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@github.com/rscottwatson/testjenkins.git"
 }
 
 
@@ -30,7 +30,7 @@ podTemplate(label: label, yaml: """apiVersion: v1
 {
     node(label) {
         stage ('download repo') {
-            download_repo("master", "images-sync", "images-sync")
+            download_repo()
         }
         stage ( 'run maven') {
            container( name: 'maven' ) {
