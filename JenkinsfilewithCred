@@ -24,7 +24,8 @@ spec:
     tty: true
 """)
 
-node {
+{
+  node {
     stage('Echo Credential') {
         withCredentials([string(credentialsId: 'test-cred', variable: 'MY_CREDENTIAL')]) {
 
@@ -33,5 +34,5 @@ node {
             // git 'https://github.com/rtyley/small-test-repo'
         }
     }
+  }
 }
-
