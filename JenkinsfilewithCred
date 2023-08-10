@@ -1,0 +1,37 @@
+
+def now = new Date()
+def label = 'scott-test-' + now.format("yyMMdd.HHmm", TimeZone.getTimeZone('America/Los_Angeles'))
+
+
+podTemplate(label: label, yaml: """apiVersion: v1
+kind: Pod
+metadata:
+  namespace: terraform
+  labels:
+    ${label}: yes
+    some-label: some-label-value
+spec:
+  containers:
+  - name: maven
+    image: maven:alpine
+    command:
+      - cat
+    tty: true
+  - name: busybox
+    image: busybox
+    command:
+      - cat
+    tty: true
+""")
+
+node {
+    stage('Echo Credential') {
+        withCredentials([string(credentialsId: 'test-cred', variable: 'MY_CREDENTIAL')]) {
+
+            // Echo the credential value using a shell command
+            sh "echo 'My credential value: $MY_CREDENTIAL'"
+            // git 'https://github.com/rtyley/small-test-repo'
+        }
+    }
+}
+
