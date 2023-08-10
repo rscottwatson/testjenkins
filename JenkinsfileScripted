@@ -1,5 +1,5 @@
 def download_repo() {
-    git branch: main, url: "https://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@github.com/rscottwatson/testjenkins.git"
+    git branch: 'main', url: "https://github.com/rscottwatson/testjenkins.git"
 }
 
 
